@@ -1,28 +1,30 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <main class="container">
+    <div class="controls">
+      <div>Show weather at your current location</div>
+      <!-- <button id="btn_coords" class="btn" type="button">Get coordinates</button>
+      <button id="btn_geopos" class="btn" type="button">Get geoposition</button> -->
+      <button id="btn_show_weather" class="btn" type="button">Show weather</button>
+      <CitySearch />
+    </div>
+    <div class="display">
+      <div id="display_coords"></div>
+      <div id="display_location"></div>
+      <div id="display_weather"></div>
+    </div>
+  </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+
+import CitySearch from './components/CitySearch.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    CitySearch,
   },
 };
 </script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
