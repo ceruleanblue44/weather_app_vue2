@@ -5,31 +5,43 @@
       <div>Show weather at your current location</div>
       <!-- <button id="btn_coords" class="btn" type="button">Get coordinates</button>
       <button id="btn_geopos" class="btn" type="button">Get geoposition</button> -->
-      <button id="btn_show_weather"
+      <!-- <button id="btn_show_weather"
               class="btn"
               type="button"
               @click="getCoords">Show weather</button>
       <button class="btn"
-              @click="getKeyByPosition">Show key</button>
+              @click="getKeyByPosition">Show key</button> -->
       <button class="btn"
-              @click="getCurrentConditions">Show current</button>
+              @click="getCurrentConditions('current')">Show current</button>
+      <button class="btn"
+              @click="getCurrentWeatherLocal">Show local new</button>
       <form>
         <label for="city_input">Or enter a city
           <input type="text"
           class="city_input"
           id="city_input"
+          v-model.trim="citySearchQuery"
+          @keyup.enter="getCity"
           placeholder="City"
           required />
         </label>
-        <input type="button" id="btn_get_city_weather" value="Go">
+        <!-- <input type="button"
+               id="btn_get_city_weather"
+               @click="getKeyByTextSearch"
+               value="Go"> -->
+            <input type="button"
+                   class="btn"
+                   value="Show city"
+                   @click="getCurrentConditions('city')">
       </form>
     </div>
     <div class="display">
-      <div id="display_coords"> {{ currentPosition }} {{ locationKey }} </div>
+      <!-- <div id="display_coords"> {{ currentPosition }} {{ locationKey }} </div> -->
       <div id="display_location"></div>
       <div id="display_weather"></div>
       <div id="display_weather_icon">
-        <img src="" alt="">
+
+        <!-- <img :src="require(`@/assets/icons/${currentConditions.icon}.png`)" alt=""> -->
       </div>
     </div>
   </main>
@@ -45,16 +57,26 @@ import {
   API_GEOPOSITION,
   API_CURRENT_CONDITIONS,
   // API_CITY_SEARCH,
-  // API_TEXT_SEARCH,
+  API_TEXT_SEARCH,
 } from '@/config';
 
 export default {
   name: 'App',
   data() {
     return {
-      city: '',
-      currentPosition: '',
+      // currentPosition: '',
+      currentPosition: {
+        latitude: null,
+        longitude: null,
+      },
       locationKey: '',
+      citySearchQuery: '',
+      currentConditions: {
+        temperature: null,
+        text: '',
+        icon: null,
+      },
+      apiCurrentConditions: {},
     };
   },
   components: {
@@ -67,15 +89,18 @@ export default {
       });
     },
 
+    // eslint-disable-next-line consistent-return
     async getCoords() {
       try {
-        const { coords } = await this.getPosition();
-        console.log(coords);
-        const { latitude, longitude } = coords;
-        this.currentPosition = `${latitude},${longitude}`;
-        console.log(latitude, longitude, this.currentPosition);
-      } catch (error) {
-        console.log(error);
+        const position = await this.getPosition();
+        console.log(position);
+        this.currentPosition.latitude = position.coords.latitude;
+        this.currentPosition.longitude = position.coords.longitude;
+        // const currentPosition = `${position.coords.latitude},${position.coords.longitude}`;
+        // console.log(currentPosition);
+        // return currentPosition;
+      } catch (err) {
+        console.error(err.message);
       }
     },
 
@@ -83,33 +108,67 @@ export default {
     // eslint-disable-next-line consistent-return
     async getKeyByPosition() {
       try {
-        await this.getCoords();
+        const currentPosition = await this.getCoords();
         const response = await axios.get(API_GEOPOSITION, {
           params: {
             apikey: API_KEY,
-            q: this.currentPosition,
+            q: currentPosition,
           },
         });
         // this.locationKey = response.data.Key;
         const locationKey = response.data.Key;
-        // console.log(locationKey);
+        console.log(locationKey);
         return locationKey;
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.error(err.message);
       }
     },
 
-    // async getKeyByTextSearch() {
-    //   try {
+    // eslint-disable-next-line consistent-return
+    async getKeyByTextSearch() {
+      if (this.citySearchQuery !== '') {
+        try {
+          const response = await axios.get(API_TEXT_SEARCH, {
+            params: {
+              apikey: API_KEY,
+              q: this.citySearchQuery,
+            },
+          });
+          console.log(response.data[0]);
+          const locationKey = response.data[0].Key;
+          console.log(locationKey);
+          return locationKey;
+        } catch (err) {
+          console.error(err.message);
+        }
+      } else {
+        console.error('Please enter a city');
+      }
+    },
 
-    //   } catch (e) {
-    //     console.err(e);
-    //   }
-    // },
+    async getCurrentWeatherLocal() {
+      await this.getCoords();
+      const response = await axios.get(API_GEOPOSITION, {
+        params: {
+          lat: this.currentPosition.latitude,
+          lon: this.currentPosition.longitude,
+          appid: API_KEY,
+          units: 'metric',
+        },
+      });
+      console.log(response);
+      this.apiCurrentConditions = response.data;
+    },
 
-    async getCurrentConditions() {
+    async getCurrentConditions(location) {
+      let locationKey;
       try {
-        const locationKey = await this.getKeyByPosition();
+        if (location === 'current') {
+          locationKey = await this.getKeyByPosition();
+        } else if (location === 'city') {
+          locationKey = await this.getKeyByTextSearch();
+        }
+        console.log(locationKey);
         const response = await axios.get(API_CURRENT_CONDITIONS + locationKey, {
           params: {
             apikey: API_KEY,
@@ -117,9 +176,12 @@ export default {
         });
         const conditions = response.data[0];
         console.log(conditions);
+        // eslint-disable-next-line prefer-destructuring
+        this.apiCurrentConditions = response.data[0];
         console.log(response.data[0].WeatherText, response.data[0].Temperature.Metric.Value);
-      } catch (e) {
-        console.error(e);
+        this.currentConditions.icon = response.data[0].WeatherIcon;
+      } catch (err) {
+        console.error(err.message);
       }
     },
   },
