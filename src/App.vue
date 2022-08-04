@@ -8,20 +8,23 @@
       <!-- <button id="btn_show_weather"
               class="btn"
               type="button"
-              @click="getCoords">Show weather</button>
+              @click="getCoords">Show weather</button>-->
       <button class="btn"
-              @click="getKeyByPosition">Show key</button> -->
+              @click="getCurrentCoords">Get current coords</button>
       <button class="btn"
-              @click="getCurrentConditions('current')">Show current</button>
+              @click="getCurrentWeather('local')">Show local weather</button>
       <button class="btn"
-              @click="getCurrentWeatherLocal">Show local new</button>
+              @click="getCoordsByCityName">Get coords by city name</button>
+
+      <!-- <button class="btn"
+              @click="getCurrentWeather('citySearch')">Show city search weather</button> -->
       <form>
         <label for="city_input">Or enter a city
           <input type="text"
           class="city_input"
           id="city_input"
           v-model.trim="citySearchQuery"
-          @keyup.enter="getCity"
+          @keydown.enter.prevent="getCurrentWeather('citySearch')"
           placeholder="City"
           required />
         </label>
@@ -31,14 +34,15 @@
                value="Go"> -->
             <input type="button"
                    class="btn"
-                   value="Show city"
-                   @click="getCurrentConditions('city')">
+                   value="Show city search weather"
+                   @click="getCurrentWeather('citySearch')">
       </form>
     </div>
     <div class="display">
       <!-- <div id="display_coords"> {{ currentPosition }} {{ locationKey }} </div> -->
       <div id="display_location"></div>
       <div id="display_weather"></div>
+      <div id="display_wind"> {{ windConverter }} </div>
       <div id="display_weather_icon">
 
         <!-- <img :src="require(`@/assets/icons/${currentConditions.icon}.png`)" alt=""> -->
@@ -54,29 +58,21 @@
 import axios from 'axios';
 import {
   API_KEY,
-  API_GEOPOSITION,
+  API_GEOCODING,
   API_CURRENT_CONDITIONS,
-  // API_CITY_SEARCH,
-  API_TEXT_SEARCH,
 } from '@/config';
 
 export default {
   name: 'App',
   data() {
     return {
-      // currentPosition: '',
       currentPosition: {
-        latitude: null,
-        longitude: null,
+        lat: null,
+        lon: null,
       },
-      locationKey: '',
       citySearchQuery: '',
-      currentConditions: {
-        temperature: null,
-        text: '',
-        icon: null,
-      },
-      apiCurrentConditions: {},
+      currentConditions: {},
+      apiData: {},
     };
   },
   components: {
@@ -90,99 +86,66 @@ export default {
     },
 
     // eslint-disable-next-line consistent-return
-    async getCoords() {
+    async getCurrentCoords() {
       try {
         const position = await this.getPosition();
-        console.log(position);
-        this.currentPosition.latitude = position.coords.latitude;
-        this.currentPosition.longitude = position.coords.longitude;
-        // const currentPosition = `${position.coords.latitude},${position.coords.longitude}`;
-        // console.log(currentPosition);
-        // return currentPosition;
+        // console.log(position);
+        this.currentPosition.lat = position.coords.latitude;
+        this.currentPosition.lon = position.coords.longitude;
       } catch (err) {
         console.error(err.message);
       }
     },
 
-    // I need to find a way to fix this!!
-    // eslint-disable-next-line consistent-return
-    async getKeyByPosition() {
-      try {
-        const currentPosition = await this.getCoords();
-        const response = await axios.get(API_GEOPOSITION, {
-          params: {
-            apikey: API_KEY,
-            q: currentPosition,
-          },
-        });
-        // this.locationKey = response.data.Key;
-        const locationKey = response.data.Key;
-        console.log(locationKey);
-        return locationKey;
-      } catch (err) {
-        console.error(err.message);
-      }
-    },
-
-    // eslint-disable-next-line consistent-return
-    async getKeyByTextSearch() {
-      if (this.citySearchQuery !== '') {
-        try {
-          const response = await axios.get(API_TEXT_SEARCH, {
-            params: {
-              apikey: API_KEY,
-              q: this.citySearchQuery,
-            },
-          });
-          console.log(response.data[0]);
-          const locationKey = response.data[0].Key;
-          console.log(locationKey);
-          return locationKey;
-        } catch (err) {
-          console.error(err.message);
-        }
-      } else {
-        console.error('Please enter a city');
-      }
-    },
-
-    async getCurrentWeatherLocal() {
-      await this.getCoords();
-      const response = await axios.get(API_GEOPOSITION, {
+    async getCoordsByCityName() {
+      const response = await axios.get(API_GEOCODING, {
         params: {
-          lat: this.currentPosition.latitude,
-          lon: this.currentPosition.longitude,
+          q: this.citySearchQuery,
+          appid: API_KEY,
+        },
+      });
+      // console.log(response.data[0]);
+      return response.data[0];
+    },
+
+    async getCurrentWeather(location) {
+      let lat;
+      let lon;
+      if (location === 'local') {
+        await this.getCurrentCoords();
+        ({ lat, lon } = this.currentPosition);
+        console.log(lat, lon);
+      } else if (location === 'citySearch') {
+        const response = await this.getCoordsByCityName();
+        ({ lat, lon } = response);
+      }
+      const response = await axios.get(API_CURRENT_CONDITIONS, {
+        params: {
+          lat,
+          lon,
           appid: API_KEY,
           units: 'metric',
         },
       });
-      console.log(response);
-      this.apiCurrentConditions = response.data;
+      // console.log(response.data);
+      this.apiData = response.data || {};
+      this.currentConditions = {
+        temp: response.data.main.temp,
+        feelsLike: response.data.main.feels_like,
+        humidity: response.data.main.humidity,
+        description: response.data.weather[0].main,
+        icon: response.data.weather[0].icon,
+        windDir: response.data.wind.deg,
+        windSpeed: response.data.wind.speed, // meter/sec or miles/hour
+      };
     },
-
-    async getCurrentConditions(location) {
-      let locationKey;
-      try {
-        if (location === 'current') {
-          locationKey = await this.getKeyByPosition();
-        } else if (location === 'city') {
-          locationKey = await this.getKeyByTextSearch();
-        }
-        console.log(locationKey);
-        const response = await axios.get(API_CURRENT_CONDITIONS + locationKey, {
-          params: {
-            apikey: API_KEY,
-          },
-        });
-        const conditions = response.data[0];
-        console.log(conditions);
-        // eslint-disable-next-line prefer-destructuring
-        this.apiCurrentConditions = response.data[0];
-        console.log(response.data[0].WeatherText, response.data[0].Temperature.Metric.Value);
-        this.currentConditions.icon = response.data[0].WeatherIcon;
-      } catch (err) {
-        console.error(err.message);
-      }
+  },
+  computed: {
+    windConverter() {
+      const windArr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+      const deg = this.currentConditions.windDir;
+      const idx = [Math.floor(((deg + (360 / 16) / 2) % 360) / (360 / 16))];
+      return windArr[idx];
     },
   },
 };
