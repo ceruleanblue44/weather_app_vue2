@@ -38,14 +38,17 @@
                    @click="getCurrentWeather('citySearch')">
       </form>
     </div>
-    <div class="display">
+    <div class="display" v-show="isDataLoaded">
       <!-- <div id="display_coords"> {{ currentPosition }} {{ locationKey }} </div> -->
-      <div id="display_location"></div>
-      <div id="display_weather"></div>
-      <div id="display_wind"> {{ windConverter }} </div>
+      <div id="display_location" > {{ currentConditions.city }} </div>
+      <div id="display_time_of_day" > {{ isDayTime }} </div>
+      <div id="display_weather"> {{ currentConditions.description }} </div>
+      <div id="display_temperature"> {{ Math.round(currentConditions.temp) }} °C </div>
+      <div id="display_feels_like"> Feels like: {{ Math.round(currentConditions.feelsLike) }} °C </div>
+      <div id="display_humidity"> Humidity: {{ currentConditions.humidity }} % </div>
+      <div id="display_wind"> Wind: {{ windConverter }}  {{ currentConditions.windSpeed }} m/s </div>
       <div id="display_weather_icon">
-
-        <!-- <img :src="require(`@/assets/icons/${currentConditions.icon}.png`)" alt=""> -->
+        <img :src="`http://openweathermap.org/img/wn/${currentConditions.icon}@2x.png`" alt="Weather icon">
       </div>
     </div>
   </main>
@@ -71,6 +74,7 @@ export default {
         lon: null,
       },
       citySearchQuery: '',
+      isDataLoaded: false,
       currentConditions: {},
       apiData: {},
     };
@@ -128,8 +132,10 @@ export default {
         },
       });
       // console.log(response.data);
+      this.isDataLoaded = true;
       this.apiData = response.data || {};
       this.currentConditions = {
+        city: response.data.name,
         temp: response.data.main.temp,
         feelsLike: response.data.main.feels_like,
         humidity: response.data.main.humidity,
@@ -146,6 +152,16 @@ export default {
       const deg = this.currentConditions.windDir;
       const idx = [Math.floor(((deg + (360 / 16) / 2) % 360) / (360 / 16))];
       return windArr[idx];
+    },
+
+    isDayTime() {
+      let timeOfDay;
+      if (!this.currentConditions.icon) {
+        timeOfDay = '';
+      } else {
+        timeOfDay = (this.currentConditions.icon).endsWith('d') ? 'Daytime' : 'Nighttime';
+      }
+      return timeOfDay;
     },
   },
 };
