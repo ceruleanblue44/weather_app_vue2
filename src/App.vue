@@ -38,17 +38,17 @@
                    @click="getCurrentWeather('citySearch')">
       </form>
     </div>
-    <div class="display" v-show="isDataLoaded">
+    <div class="display" v-if="isDataLoaded">
       <!-- <div id="display_coords"> {{ currentPosition }} {{ locationKey }} </div> -->
       <div id="display_location" > {{ currentConditions.city }} </div>
-      <div id="display_time_of_day" > {{ isDayTime }} </div>
+      <div id="display_time_of_day" > {{ getTimeOfDay }} </div>
       <div id="display_weather"> {{ currentConditions.description }} </div>
       <div id="display_temperature"> {{ Math.round(currentConditions.temp) }} °C </div>
       <div id="display_feels_like"> Feels like: {{ Math.round(currentConditions.feelsLike) }} °C </div>
       <div id="display_humidity"> Humidity: {{ currentConditions.humidity }} % </div>
       <div id="display_wind"> Wind: {{ windConverter }}  {{ currentConditions.windSpeed }} m/s </div>
       <div id="display_weather_icon">
-        <img :src="`http://openweathermap.org/img/wn/${currentConditions.icon}@2x.png`" alt="Weather icon">
+        <img :src="setWeatherIcon" alt="Weather icon">
       </div>
     </div>
   </main>
@@ -75,7 +75,16 @@ export default {
       },
       citySearchQuery: '',
       isDataLoaded: false,
-      currentConditions: {},
+      currentConditions: {
+        city: '',
+        temp: '',
+        feelsLike: '',
+        humidity: '',
+        description: '',
+        icon: '',
+        windDir: '',
+        windSpeed: '',
+      },
       apiData: {},
     };
   },
@@ -106,9 +115,10 @@ export default {
         params: {
           q: this.citySearchQuery,
           appid: API_KEY,
+          limit: 5,
         },
       });
-      // console.log(response.data[0]);
+      console.log(response.data);
       return response.data[0];
     },
 
@@ -120,6 +130,10 @@ export default {
         ({ lat, lon } = this.currentPosition);
         console.log(lat, lon);
       } else if (location === 'citySearch') {
+        if (this.citySearchQuery === '') {
+          console.error('Please provide a city name!');
+          return;
+        }
         const response = await this.getCoordsByCityName();
         ({ lat, lon } = response);
       }
@@ -148,13 +162,16 @@ export default {
   },
   computed: {
     windConverter() {
+      if (this.currentConditions.windDir === '') {
+        return '';
+      }
       const windArr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
       const deg = this.currentConditions.windDir;
       const idx = [Math.floor(((deg + (360 / 16) / 2) % 360) / (360 / 16))];
       return windArr[idx];
     },
 
-    isDayTime() {
+    getTimeOfDay() {
       let timeOfDay;
       if (!this.currentConditions.icon) {
         timeOfDay = '';
@@ -162,6 +179,12 @@ export default {
         timeOfDay = (this.currentConditions.icon).endsWith('d') ? 'Daytime' : 'Nighttime';
       }
       return timeOfDay;
+    },
+
+    setWeatherIcon() {
+      return this.currentConditions.icon
+        ? `http://openweathermap.org/img/wn/${this.currentConditions.icon}@2x.png`
+        : '';
     },
   },
 };
