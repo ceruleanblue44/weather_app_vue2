@@ -19,7 +19,8 @@
       <!-- <button class="btn"
               @click="getCurrentWeather('citySearch')">Show city search weather</button> -->
       <form>
-        <label for="city_input">Or enter a city
+        <CitySearch v-model="citySearchQuery"/>
+        <!-- <label for="city_input">Or enter a city
           <input type="text"
           class="city_input"
           id="city_input"
@@ -27,7 +28,7 @@
           @keydown.enter.prevent="getCurrentWeather('citySearch')"
           placeholder="City"
           required />
-        </label>
+        </label> -->
         <!-- <input type="button"
                id="btn_get_city_weather"
                @click="getKeyByTextSearch"
@@ -57,13 +58,13 @@
 
 <script>
 
-// import CitySearch from './components/CitySearch.vue';
 import axios from 'axios';
 import {
   API_KEY,
   API_GEOCODING,
   API_CURRENT_CONDITIONS,
 } from '@/config';
+import CitySearch from './components/CitySearch.vue';
 
 export default {
   name: 'App',
@@ -89,7 +90,7 @@ export default {
     };
   },
   components: {
-    // CitySearch,
+    CitySearch,
   },
   methods: {
     getPosition() {
@@ -118,8 +119,15 @@ export default {
           limit: 5,
         },
       });
-      console.log(response.data);
+      console.log(response.data, response.data.length);
       return response.data[0];
+      // return response.data;
+      // This method returns an empty array if the search query string is some bs,
+      // and then getCurrentWeather('citySearch') tries to destructure the response
+      // and throws an error, needs handling!
+
+      // If response.data has several cities, we ask the user which one and pass
+      // that data into the getCurrentWeather('citySearch').
     },
 
     async getCurrentWeather(location) {
@@ -135,7 +143,13 @@ export default {
           return;
         }
         const response = await this.getCoordsByCityName();
+        console.log(response);
         ({ lat, lon } = response);
+        // if (response.length > 0) {
+        //   ({ lat, lon } = response);
+        // } else {
+        //   console.error('Nothing was found');
+        // }
       }
       const response = await axios.get(API_CURRENT_CONDITIONS, {
         params: {
