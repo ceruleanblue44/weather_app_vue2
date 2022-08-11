@@ -28,5 +28,13 @@ export default {
     prop: 'citySearchQuery',
     event: 'updateCity',
   },
+  computed: {
+
+  },
+  // methods: {
+  //   keyDownWeirdness() {
+  //     console.log(123);
+  //   },
+  // },
 };
 </script>

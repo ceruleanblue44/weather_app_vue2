@@ -18,8 +18,8 @@
 
       <!-- <button class="btn"
               @click="getCurrentWeather('citySearch')">Show city search weather</button> -->
-      <form>
-        <CitySearch v-model="citySearchQuery"/>
+      <form >
+        <CitySearch v-model="citySearchQuery"  />
         <!-- <label for="city_input">Or enter a city
           <input type="text"
           class="city_input"
@@ -93,6 +93,10 @@ export default {
     CitySearch,
   },
   methods: {
+    keyDownWeirdness() {
+      console.log(123);
+    },
+
     getPosition() {
       return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
