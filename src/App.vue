@@ -3,12 +3,6 @@
     <main class="container">
     <div class="controls">
       <div>Show weather at your current location</div>
-      <!-- <button id="btn_coords" class="btn" type="button">Get coordinates</button>
-      <button id="btn_geopos" class="btn" type="button">Get geoposition</button> -->
-      <!-- <button id="btn_show_weather"
-              class="btn"
-              type="button"
-              @click="getCoords">Show weather</button>-->
       <button class="btn"
               @click="getCurrentCoords">Get current coords</button>
       <button class="btn"
@@ -16,16 +10,14 @@
       <button class="btn"
               @click="getCoordsByCityName">Get coords by city name</button>
 
-      <!-- <button class="btn"
-              @click="getCurrentWeather('citySearch')">Show city search weather</button> -->
-      <form >
-        <CitySearch v-model="citySearchQuery"  />
+      <form @submit.prevent>
+        <SearchCity v-model="formData.searchCityQuery" title="Or enter a city" :error="formData.searchError" placeholder="City" />
         <!-- <label for="city_input">Or enter a city
           <input type="text"
           class="city_input"
           id="city_input"
-          v-model.trim="citySearchQuery"
-          @keydown.enter.prevent="getCurrentWeather('citySearch')"
+          v-model.trim="searchCityQuery"
+          @keydown.enter.prevent="getCurrentWeather('searchCity')"
           placeholder="City"
           required />
         </label> -->
@@ -36,12 +28,12 @@
             <input type="button"
                    class="btn"
                    value="Show city search weather"
-                   @click="getCurrentWeather('citySearch')">
+                   @click="getCurrentWeather('searchCity')">
       </form>
     </div>
     <div class="display" v-if="isDataLoaded">
       <!-- <div id="display_coords"> {{ currentPosition }} {{ locationKey }} </div> -->
-      <div id="display_location" > {{ currentConditions.city }} </div>
+      <div id="display_location" > {{ currentConditions.city }}, {{ currentConditions.country }} </div>
       <div id="display_time_of_day" > {{ getTimeOfDay }} </div>
       <div id="display_weather"> {{ currentConditions.description }} </div>
       <div id="display_temperature"> {{ Math.round(currentConditions.temp) }} °C </div>
@@ -64,7 +56,7 @@ import {
   API_GEOCODING,
   API_CURRENT_CONDITIONS,
 } from '@/config';
-import CitySearch from './components/CitySearch.vue';
+import SearchCity from './components/SearchCity.vue';
 
 export default {
   name: 'App',
@@ -74,10 +66,14 @@ export default {
         lat: null,
         lon: null,
       },
-      citySearchQuery: '',
+      formData: {
+        searchCityQuery: '',
+        searchError: '',
+      },
       isDataLoaded: false,
       currentConditions: {
         city: '',
+        country: '',
         temp: '',
         feelsLike: '',
         humidity: '',
@@ -90,7 +86,7 @@ export default {
     };
   },
   components: {
-    CitySearch,
+    SearchCity,
   },
   methods: {
     keyDownWeirdness() {
@@ -118,7 +114,7 @@ export default {
     async getCoordsByCityName() {
       const response = await axios.get(API_GEOCODING, {
         params: {
-          q: this.citySearchQuery,
+          q: this.formData.searchCityQuery,
           appid: API_KEY,
           limit: 5,
         },
@@ -127,11 +123,11 @@ export default {
       return response.data[0];
       // return response.data;
       // This method returns an empty array if the search query string is some bs,
-      // and then getCurrentWeather('citySearch') tries to destructure the response
+      // and then getCurrentWeather('searchCity') tries to destructure the response
       // and throws an error, needs handling!
 
       // If response.data has several cities, we ask the user which one and pass
-      // that data into the getCurrentWeather('citySearch').
+      // that data into the getCurrentWeather('searchCity').
     },
 
     async getCurrentWeather(location) {
@@ -141,8 +137,8 @@ export default {
         await this.getCurrentCoords();
         ({ lat, lon } = this.currentPosition);
         console.log(lat, lon);
-      } else if (location === 'citySearch') {
-        if (this.citySearchQuery === '') {
+      } else if (location === 'searchCity') {
+        if (this.formData.searchCityQuery === '') {
           console.error('Please provide a city name!');
           return;
         }
@@ -168,6 +164,7 @@ export default {
       this.apiData = response.data || {};
       this.currentConditions = {
         city: response.data.name,
+        country: response.data.sys.country,
         temp: response.data.main.temp,
         feelsLike: response.data.main.feels_like,
         humidity: response.data.main.humidity,
