@@ -34,5 +34,10 @@ export default {
       },
     },
   },
+  methods: {
+    enterKeyTest() {
+      console.log('Oh, crap!');
+    },
+  },
 };
 </script>

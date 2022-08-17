@@ -10,7 +10,7 @@
       <button class="btn"
               @click="getCoordsByCityName">Get coords by city name</button>
 
-      <form @submit.prevent>
+      <form @submit.prevent @keydown.enter="enterKeyTest">
         <SearchCity v-model="formData.searchCityQuery" title="Or enter a city" :error="formData.searchError" placeholder="City" />
         <!-- <label for="city_input">Or enter a city
           <input type="text"
@@ -67,20 +67,20 @@ export default {
         lon: null,
       },
       formData: {
-        searchCityQuery: '',
-        searchError: '',
+        searchCityQuery: null,
+        searchError: null,
       },
       isDataLoaded: false,
       currentConditions: {
-        city: '',
-        country: '',
-        temp: '',
-        feelsLike: '',
-        humidity: '',
-        description: '',
-        icon: '',
-        windDir: '',
-        windSpeed: '',
+        // city: '',
+        // country: '',
+        // temp: '',
+        // feelsLike: '',
+        // humidity: '',
+        // description: '',
+        // icon: '',
+        // windDir: '',
+        // windSpeed: '',
       },
       apiData: {},
     };
@@ -89,8 +89,8 @@ export default {
     SearchCity,
   },
   methods: {
-    keyDownWeirdness() {
-      console.log(123);
+    enterKeyTest() {
+      console.log('Oh, crap!');
     },
 
     getPosition() {
@@ -120,12 +120,10 @@ export default {
         },
       });
       console.log(response.data, response.data.length);
+      if (!response.data.length) {
+        return '';
+      }
       return response.data[0];
-      // return response.data;
-      // This method returns an empty array if the search query string is some bs,
-      // and then getCurrentWeather('searchCity') tries to destructure the response
-      // and throws an error, needs handling!
-
       // If response.data has several cities, we ask the user which one and pass
       // that data into the getCurrentWeather('searchCity').
     },
@@ -142,37 +140,37 @@ export default {
           console.error('Please provide a city name!');
           return;
         }
-        const response = await this.getCoordsByCityName();
-        console.log(response);
-        ({ lat, lon } = response);
-        // if (response.length > 0) {
-        //   ({ lat, lon } = response);
-        // } else {
-        //   console.error('Nothing was found');
-        // }
+        const coordsResponse = await this.getCoordsByCityName();
+        console.log(coordsResponse);
+        if (!coordsResponse) {
+          console.error('Nothing was found');
+          this.formData.searchError = 'Nothing was found';
+        } else {
+          ({ lat, lon } = coordsResponse);
+          const response = await axios.get(API_CURRENT_CONDITIONS, {
+            params: {
+              lat,
+              lon,
+              appid: API_KEY,
+              units: 'metric',
+            },
+          });
+          // console.log(response.data);
+          this.isDataLoaded = true;
+          this.apiData = response.data || {};
+          this.currentConditions = {
+            city: response.data.name,
+            country: response.data.sys.country,
+            temp: response.data.main.temp,
+            feelsLike: response.data.main.feels_like,
+            humidity: response.data.main.humidity,
+            description: response.data.weather[0].main,
+            icon: response.data.weather[0].icon,
+            windDir: response.data.wind.deg,
+            windSpeed: response.data.wind.speed, // meter/sec or miles/hour
+          } || {};
+        }
       }
-      const response = await axios.get(API_CURRENT_CONDITIONS, {
-        params: {
-          lat,
-          lon,
-          appid: API_KEY,
-          units: 'metric',
-        },
-      });
-      // console.log(response.data);
-      this.isDataLoaded = true;
-      this.apiData = response.data || {};
-      this.currentConditions = {
-        city: response.data.name,
-        country: response.data.sys.country,
-        temp: response.data.main.temp,
-        feelsLike: response.data.main.feels_like,
-        humidity: response.data.main.humidity,
-        description: response.data.weather[0].main,
-        icon: response.data.weather[0].icon,
-        windDir: response.data.wind.deg,
-        windSpeed: response.data.wind.speed, // meter/sec or miles/hour
-      };
     },
   },
   computed: {
