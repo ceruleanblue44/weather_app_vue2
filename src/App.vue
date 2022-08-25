@@ -1,4 +1,3 @@
-<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
   <div id="app">
     <main class="container">
@@ -6,14 +5,20 @@
         <div>Show weather at your current location</div>
         <!-- <button class="btn" @click="getCurrentCoords">Get current coords</button> -->
         <button class="btn" @click="getCurrentWeather('local')">Show local weather</button>
-        <button class="btn" @click="getCoordsByCityName">Get coords by city name</button>
+        <!-- <button class="btn" @click="getCoordsByCityName">Search</button> -->
 
-        <form @submit.prevent @keydown.enter="enterKeyTest">
-          <SearchCity v-model="formData.searchCityQuery" title="Or enter a city" :error="formData.searchError" placeholder="City" />
-          <input type="button" class="btn" value="Show city search weather" @click="getCurrentWeather('searchCity')" />
-          <ul class="multiple__cities" v-if="citiesData">
-            <!-- Use spans to display all info -->
-            <li v-for="(city, index) in citiesData" :key="index" @click="chooseCity($event); pickCity(index)">
+        <form @submit.prevent @keydown.enter="getCoordsByCityName">
+          <SearchCity v-model="formData.searchCityQuery"
+                      title="Or enter a city"
+                      :error="formData.searchError"
+                      placeholder="City" />
+          <input type="button" class="btn" value="Search" @click="getCoordsByCityName" />
+          <DisplaySearchResults v-show="citiesData" :citiesData="citiesData"/>
+          <!-- <ul class="multiple__cities" v-if="citiesData">
+            <li v-for="(city, index) in citiesData"
+                :key="index"
+                :data-idx="index"
+                @click="chooseCity($event); getCurrentWeather('searchCity')">
               <span>{{ city.name }}</span>
               <span>{{ city.country }}</span>
               <img :src="setCountryFlag(index)" alt="Country flag" />
@@ -21,21 +26,10 @@
               <span>{{ city.lat }}</span>
               <span>{{ city.lon }}</span>
             </li>
-          </ul>
+          </ul> -->
         </form>
       </div>
-      <div class="display" v-if="isDataLoaded">
-        <div id="display_location">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
-        <div id="display_time_of_day">{{ getTimeOfDay }}</div>
-        <div id="display_weather">{{ currentConditions.description }}</div>
-        <div id="display_temperature">{{ Math.round(currentConditions.temp) }} °C</div>
-        <div id="display_feels_like">Feels like: {{ Math.round(currentConditions.feelsLike) }} °C</div>
-        <div id="display_humidity">Humidity: {{ currentConditions.humidity }} %</div>
-        <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} m/s</div>
-        <div id="display_weather_icon">
-          <img :src="setWeatherIcon" alt="Weather icon" />
-        </div>
-      </div>
+      <DisplayCurrentWeather v-if="isDataLoaded" :currentConditions="currentConditions" />
     </main>
   </div>
 </template>
@@ -45,6 +39,8 @@ import axios from 'axios';
 
 import { API_KEY, API_GEOCODING, API_CURRENT_CONDITIONS } from '@/config';
 import SearchCity from './components/SearchCity.vue';
+import DisplayCurrentWeather from './components/DisplayCurrentWeather.vue';
+import DisplaySearchResults from './components/DisplaySearchResults.vue';
 
 export default {
   name: 'App',
@@ -59,24 +55,18 @@ export default {
         searchError: null,
       },
       isDataLoaded: false,
+      isCityListOpen: false,
+      isCurrentConditionsDisplayed: false,
       citiesData: null,
-      currentConditions: {
-        // city: '',
-        // country: '',
-        // temp: '',
-        // feelsLike: '',
-        // humidity: '',
-        // description: '',
-        // icon: '',
-        // windDir: '',
-        // windSpeed: '',
-      },
+      currentConditions: null,
       apiData: null,
     };
   },
 
   components: {
     SearchCity,
+    DisplayCurrentWeather,
+    DisplaySearchResults,
   },
 
   methods: {
@@ -163,56 +153,26 @@ export default {
         windDir: response.data.wind.deg,
         windSpeed: response.data.wind.speed, // meter/sec or miles/hour
       } || {};
+      this.isCurrentConditionsDisplayed = true;
     },
 
-    setCountryFlag(idx) {
-      if (!this.citiesData) {
-        return '';
-      }
-      const country = this.citiesData.at(idx).country.toLowerCase();
-      return `http://openweathermap.org/images/flags/${country}.png`;
-    },
+    // setCountryFlag(idx) {
+    //   if (!this.citiesData) {
+    //     return '';
+    //   }
+    //   const country = this.citiesData.at(idx).country.toLowerCase();
+    //   return `http://openweathermap.org/images/flags/${country}.png`;
+    // },
 
-    pickCity(idx) {
-      console.log(idx);
+    chooseCity(event) {
+      const city = event.currentTarget;
+      // console.log(city);
+      const { idx } = city.dataset;
+      // console.log(idx);
       this.coords.lat = this.citiesData[idx].lat;
       this.coords.lon = this.citiesData[idx].lon;
     },
-
-    chooseCity(event) {
-      console.log(event.target.closest('ul'));
-    },
   },
 
-  computed: {
-    windConverter() {
-      if (this.currentConditions.windDir === '') {
-        return '';
-      }
-      const windArr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-      const deg = this.currentConditions.windDir;
-      const idx = [Math.floor(((deg + 360 / 16 / 2) % 360) / (360 / 16))];
-      return windArr[idx];
-    },
-
-    getTimeOfDay() {
-      let timeOfDay;
-      if (!this.currentConditions.icon) {
-        timeOfDay = '';
-      } else {
-        timeOfDay = this.currentConditions.icon.endsWith('d') ? 'Daytime' : 'Nighttime';
-      }
-      return timeOfDay;
-    },
-
-    setWeatherIcon() {
-      return this.currentConditions.icon
-        ? `http://openweathermap.org/img/wn/${this.currentConditions.icon}@2x.png`
-        : '';
-    },
-  },
-  // watch: {
-  //   citiesData: this.setCountryFlag(idx),
-  // },
 };
 </script>
