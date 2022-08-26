@@ -4,8 +4,7 @@
     class="city__input"
     id="city__input"
     v-model="dataValue"
-    :placeholder="placeholder"
-    required />
+    :placeholder="placeholder" />
     <span class="form__error" v-if="error">{{ error }}</span>
 </label>
 </template>
@@ -13,7 +12,12 @@
 <script>
 export default {
   name: 'SearchCity',
-  props: ['title', 'error', 'placeholder', 'value'],
+  props: {
+    title: String,
+    error: String,
+    placeholder: String,
+    value: String,
+  },
   computed: {
     dataValue: {
       get() {

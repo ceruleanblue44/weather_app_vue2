@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: 'DisplayCurrentWeather',
+  name: 'CurrentWeatherDisplay',
   props: {
     currentConditions: Object,
   },
