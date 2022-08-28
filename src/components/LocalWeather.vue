@@ -2,7 +2,7 @@
   <div>
     <div>Show weather at your current location</div>
     <!-- <button class="btn" @click="getCurrentCoords">Get current coords</button> -->
-    <button class="btn" @click="localCoords">
+    <button class="btn btn__local" @click="localCoords">
       Show local weather
     </button>
   </div>

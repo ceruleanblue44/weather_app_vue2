@@ -1,6 +1,6 @@
 <!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
-  <ul class="multiple__cities" v-if="citiesData && filteredCitiesData.length > 0">
+  <ul class="city__list" v-if="citiesData && filteredCitiesData.length > 0">
     <li v-for="(city, index) in filteredCitiesData"
         :key="index"
         :data-idx="index"

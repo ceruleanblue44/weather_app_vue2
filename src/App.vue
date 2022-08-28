@@ -5,7 +5,7 @@
 
         <LocalWeather @update-coords="updateCoords" />
 
-        <form @submit.prevent @keydown.enter="getCoordsByCityName">
+        <form class="search__form" @submit.prevent @keydown.enter="getCoordsByCityName">
           <SearchCity
             v-model="formData.searchCityQuery"
             title="Or enter a city"
@@ -14,17 +14,16 @@
           />
           <input
             type="button"
-            class="btn"
-            value="Search"
+            class="btn btn__search"
             @click="getCoordsByCityName"
           />
-          <SearchResults
-            v-show="!isCityChosen"
-            :citiesData="citiesData"
-            :searchCityQuery="formData.searchCityQuery"
-            @update-coords="updateCoords"
-          />
         </form>
+        <SearchResults
+          v-show="!isCityChosen"
+          :citiesData="citiesData"
+          :searchCityQuery="formData.searchCityQuery"
+          @update-coords="updateCoords"
+        />
       </div>
       <CurrentWeatherDisplay
         v-if="isDataLoaded"
@@ -107,6 +106,7 @@ export default {
     },
 
     async getCurrentWeather(location) {
+      this.formData.searchError = null;
       try {
         let lat;
         let lon;
