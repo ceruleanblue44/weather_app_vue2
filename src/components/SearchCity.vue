@@ -1,5 +1,6 @@
 <template>
   <label for="city__input" :error="error">
+    <!-- The for attribute on label is not necessary if input is nested in it, but eslint swears :-) -->
     <span class="form__title">{{ title }}</span>
     <input type="text" class="city__input" id="city__input" v-model="dataValue" :placeholder="placeholder" />
     <span class="form__error" v-if="error">{{ error }}</span>

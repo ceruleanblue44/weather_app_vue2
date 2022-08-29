@@ -2,29 +2,28 @@
   <div id="app">
     <main class="container">
       <div class="controls">
-
         <LocalWeather @update-coords="updateCoords" />
-
-        <form class="search__form" @submit.prevent @keydown.enter="getCoordsByCityName">
-          <SearchCity
-            v-model="formData.searchCityQuery"
-            title="Or enter a city"
-            :error="formData.searchError"
-            placeholder="City"
-          />
-          <input
-            type="button"
-            class="btn btn__search"
-            @click="getCoordsByCityName"
-          />
-        </form>
-        <SearchResults
-          v-show="!isCityChosen"
-          :citiesData="citiesData"
-          :searchCityQuery="formData.searchCityQuery"
-          @update-coords="updateCoords"
-        />
+        <UnitsToggle />
       </div>
+      <form class="search__form" @submit.prevent @keydown.enter="getCoordsByCityName">
+        <SearchCity
+          v-model="formData.searchCityQuery"
+          title="Or enter a city"
+          :error="formData.searchError"
+          placeholder="City"
+        />
+        <input
+          type="button"
+          class="btn btn__search"
+          @click="getCoordsByCityName"
+        />
+      </form>
+      <SearchResults
+        v-show="!isCityChosen"
+        :citiesData="citiesData"
+        :searchCityQuery="formData.searchCityQuery"
+        @update-coords="updateCoords"
+      />
       <CurrentWeatherDisplay
         v-if="isDataLoaded"
         :currentConditions="currentConditions"
@@ -41,6 +40,7 @@ import SearchCity from './components/SearchCity.vue';
 import CurrentWeatherDisplay from './components/CurrentWeatherDisplay.vue';
 import SearchResults from './components/SearchResults.vue';
 import LocalWeather from './components/LocalWeather.vue';
+import UnitsToggle from './components/UnitsToggle.vue';
 
 export default {
   name: 'App',
@@ -57,6 +57,7 @@ export default {
       isDataLoaded: false,
       isCityChosen: false,
       citiesData: null,
+      units: 'metric',
       currentConditions: null,
       apiData: null,
     };
@@ -67,6 +68,7 @@ export default {
     CurrentWeatherDisplay,
     SearchResults,
     LocalWeather,
+    UnitsToggle,
   },
 
   methods: {
@@ -110,6 +112,7 @@ export default {
       try {
         let lat;
         let lon;
+        // We now set lat and lon, no need to have the location parameter
         if (location === 'local') {
           await this.getCurrentCoords();
         } else if (location === 'searchCity') {
@@ -125,7 +128,7 @@ export default {
             lat,
             lon,
             appid: API_KEY,
-            units: 'metric',
+            units: this.units,
           },
         });
         // console.log(response.data);
