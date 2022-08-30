@@ -2,9 +2,10 @@
 <template>
   <div class="units__toggle">
       <span class="units__text">Metric: °C, m/s</span>
-      <div class="switch" @click="isChecked">
+      <!-- <div class="switch" @click="isChecked"> -->
+      <div class="switch">
         <label for="units-checkbox" class="">
-        <input type="checkbox" name="units" id="units-checkbox">
+        <input type="checkbox" name="units" id="units-checkbox" @change="toggle">
         <span class="slider round"></span>
         </label>
       </div>
@@ -14,16 +15,16 @@
 
 <script>
 export default {
-  name: 'UnitsToggle',
-  props: {
-    units: String,
+  name: 'UnitsToggleButton',
+  data() {
+    return {
+      isToggled: false,
+    };
   },
   methods: {
-    isChecked() {
-      const checkBox = document.getElementById('units-checkbox');
-      checkBox.checked
-        ? console.log('Checked')
-        : console.log('Not checked');
+    toggle() {
+      this.isToggled = !this.isToggled;
+      this.$emit('toggle-units', this.isToggled);
     },
   },
 };

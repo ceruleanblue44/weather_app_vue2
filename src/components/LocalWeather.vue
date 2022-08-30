@@ -12,7 +12,6 @@
 export default {
   name: 'LocalWeather',
   methods: {
-
     getPosition() {
       return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);

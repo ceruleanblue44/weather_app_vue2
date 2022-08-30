@@ -34,8 +34,22 @@ body {
     border-radius: 20px;
   }
 
-  &__search {
-    align-self: flex-end;
+  
+
+}
+
+.search-form {
+  display: flex;
+  width: 60%;
+  //   label {
+  //   
+  // }
+
+  &__content {
+    width: 100%;
+  }
+
+  &__btn {
     height: $search-field-height;
     padding: 0 20px;
     border-radius: 0 5px 5px 0;
@@ -45,19 +59,8 @@ body {
     // background-position: center;
   }
 
-}
-
-.search__form {
-  display: flex;
-  width: 100%;
-
-    label {
-    width: 60%;
-  }
-}
-
-.city__input {
-  display: block;
+  &__input {
+  // display: block;
   width: 100%;
   border-radius: 5px 0 0 5px;
   border: 1px solid turquoise;
@@ -69,6 +72,9 @@ body {
     border: 1px solid teal;
   }
 }
+}
+
+
 
 .d-none {
   display: none;

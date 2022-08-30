@@ -3,18 +3,17 @@
     <main class="container">
       <div class="controls">
         <LocalWeather @update-coords="updateCoords" />
-        <UnitsToggle />
+        <UnitsToggleButton @toggle-units="toggleUnits"/>
       </div>
-      <form class="search__form" @submit.prevent @keydown.enter="getCoordsByCityName">
+      <form class="search-form" @submit.prevent @keydown.enter="getCoordsByCityName">
         <SearchCity
           v-model="formData.searchCityQuery"
-          title="Or enter a city"
           :error="formData.searchError"
-          placeholder="City"
+          placeholder="Search city"
         />
         <input
           type="button"
-          class="btn btn__search"
+          class="btn search-form__btn"
           @click="getCoordsByCityName"
         />
       </form>
@@ -27,6 +26,7 @@
       <CurrentWeatherDisplay
         v-if="isDataLoaded"
         :currentConditions="currentConditions"
+        :units="units"
       />
     </main>
   </div>
@@ -40,7 +40,7 @@ import SearchCity from './components/SearchCity.vue';
 import CurrentWeatherDisplay from './components/CurrentWeatherDisplay.vue';
 import SearchResults from './components/SearchResults.vue';
 import LocalWeather from './components/LocalWeather.vue';
-import UnitsToggle from './components/UnitsToggle.vue';
+import UnitsToggleButton from './components/UnitsToggleButton.vue';
 
 export default {
   name: 'App',
@@ -68,7 +68,7 @@ export default {
     CurrentWeatherDisplay,
     SearchResults,
     LocalWeather,
-    UnitsToggle,
+    UnitsToggleButton,
   },
 
   methods: {
@@ -83,7 +83,7 @@ export default {
       this.formData.searchError = null;
       try {
         if (this.formData.searchCityQuery === null || this.formData.searchCityQuery === '') {
-          throw new Error('Please provide a city name!');
+          throw new Error('Please enter a city name');
         }
         const response = await axios.get(API_GEOCODING, {
           params: {
@@ -94,7 +94,7 @@ export default {
         });
         // console.log(response.data, response.data.length);
         if (response.data.length === 0) {
-          throw new Error('Nothing arrived');
+          throw new Error('Not found');
         } else {
           this.citiesData = response.data;
         }
@@ -107,17 +107,11 @@ export default {
       }
     },
 
-    async getCurrentWeather(location) {
+    async getCurrentWeather() {
       this.formData.searchError = null;
       try {
         let lat;
         let lon;
-        // We now set lat and lon, no need to have the location parameter
-        if (location === 'local') {
-          await this.getCurrentCoords();
-        } else if (location === 'searchCity') {
-          await this.getCoordsByCityName();
-        }
         if (!this.coords.lat || !this.coords.lon) {
           throw new Error('Empty coords');
         } else {
@@ -156,11 +150,21 @@ export default {
       this.getCurrentWeather();
       this.isCityChosen = true;
     },
+
+    toggleUnits(e) {
+      e ? this.units = 'imperial' : this.units = 'metric';
+    },
   },
 
   computed: {
 
   },
-
+  watch: {
+    units() {
+      if (this.coords.lat && this.coords.lon) {
+        this.getCurrentWeather();
+      }
+    },
+  },
 };
 </script>

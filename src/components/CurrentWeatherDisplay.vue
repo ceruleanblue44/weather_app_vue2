@@ -3,10 +3,10 @@
         <div id="display_location">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
         <div id="display_time_of_day">{{ getTimeOfDay }}</div>
         <div id="display_weather">{{ currentConditions.description }}</div>
-        <div id="display_temperature">{{ Math.round(currentConditions.temp) }} °C</div>
-        <div id="display_feels_like">Feels like: {{ Math.round(currentConditions.feelsLike) }} °C</div>
+        <div id="display_temperature">{{ Math.round(currentConditions.temp) }} °{{ unitsTemperature }}</div>
+        <div id="display_feels_like">Feels like: {{ Math.round(currentConditions.feelsLike) }} °{{ unitsTemperature }}</div>
         <div id="display_humidity">Humidity: {{ currentConditions.humidity }} %</div>
-        <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} m/s</div>
+        <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} {{ unitsWindSpeed }}</div>
         <div id="display_weather_icon">
           <img :src="setWeatherIcon" alt="Weather icon" />
         </div>
@@ -18,6 +18,7 @@ export default {
   name: 'CurrentWeatherDisplay',
   props: {
     currentConditions: Object,
+    units: String,
   },
   computed: {
     windConverter() {
@@ -44,6 +45,18 @@ export default {
       return this.currentConditions.icon
         ? `http://openweathermap.org/img/wn/${this.currentConditions.icon}@2x.png`
         : '';
+    },
+    unitsTemperature() {
+      if (this.units === 'metric') {
+        return 'C';
+      }
+      return 'F';
+    },
+    unitsWindSpeed() {
+      if (this.units === 'metric') {
+        return 'm/s';
+      }
+      return 'mph';
     },
   },
 };
