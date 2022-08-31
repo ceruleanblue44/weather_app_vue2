@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <div>Show weather at your current location</div>
+  <div class="search-local align-center">
     <!-- <button class="btn" @click="getCurrentCoords">Get current coords</button> -->
     <button class="btn btn__local" @click="localCoords">
-      Show local weather
     </button>
+    <div class="text-s">Current location</div>
   </div>
 </template>
 

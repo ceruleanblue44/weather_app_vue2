@@ -4,7 +4,7 @@
       <!-- The for attribute on label is not necessary if input is nested in it, but eslint swears :-) -->
       <input type="text" class="search-form__input" id="city__input" v-model="dataValue" :placeholder="placeholder" />
     </label>
-    <span class="form__error" v-if="error">{{ error }}</span>
+    <span class="search-form__error text-s" v-if="error">{{ error }}</span>
   </div>
 </template>
 

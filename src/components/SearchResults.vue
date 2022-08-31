@@ -1,16 +1,21 @@
 <!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
-  <ul class="city__list" v-if="citiesData && filteredCitiesData.length > 0">
-    <li v-for="(city, index) in filteredCitiesData"
+  <ul class="city-list" v-if="citiesData">
+    <li class="city-list__item" v-for="(city, index) in citiesData"
         :key="index"
-        :data-idx="index"
         @click="chooseCity(city)">
-      <span>{{ city.name }}</span>
-      <span>{{ city.country }}</span>
-      <img :src="setCountryFlag(index)" alt="Country flag" />
-      <span>{{ city.state }}</span>
-      <span>{{ city.lat }}</span>
-      <span>{{ city.lon }}</span>
+      <div class="city-list__item-location">
+        <div class="">{{ city.name }}, {{ city.country }}</div>
+        <div class="text-s" v-if="city.state">{{ city.state }}</div>
+      </div>
+      <div class="city-list__item-flag">
+        <img :src="setCountryFlag(index)" alt="Country flag" />
+      </div>
+      <div class="city-list__item-coords">
+        <div class="text-xs">{{ city.lat.toFixed(3) }}</div>
+        <div class="text-xs">{{ city.lon.toFixed(3) }}</div>
+      </div>
+
     </li>
   </ul>
 </template>

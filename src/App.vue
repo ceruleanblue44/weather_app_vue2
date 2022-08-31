@@ -1,10 +1,8 @@
 <template>
   <div id="app">
     <main class="container">
-      <div class="controls">
-        <LocalWeather @update-coords="updateCoords" />
+        <h2>My weather app</h2>
         <UnitsToggleButton @toggle-units="toggleUnits"/>
-      </div>
       <form class="search-form" @submit.prevent @keydown.enter="getCoordsByCityName">
         <SearchCity
           v-model="formData.searchCityQuery"
@@ -16,13 +14,15 @@
           class="btn search-form__btn"
           @click="getCoordsByCityName"
         />
-      </form>
-      <SearchResults
+        <SearchResults
         v-show="!isCityChosen"
         :citiesData="citiesData"
         :searchCityQuery="formData.searchCityQuery"
         @update-coords="updateCoords"
       />
+      </form>
+      <LocalWeather @update-coords="updateCoords" />
+
       <CurrentWeatherDisplay
         v-if="isDataLoaded"
         :currentConditions="currentConditions"

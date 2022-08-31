@@ -1,16 +1,20 @@
 <template>
-  <div class="display">
-        <div id="display_location">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
-        <div id="display_time_of_day">{{ getTimeOfDay }}</div>
-        <div id="display_weather">{{ currentConditions.description }}</div>
-        <div id="display_temperature">{{ Math.round(currentConditions.temp) }} °{{ unitsTemperature }}</div>
-        <div id="display_feels_like">Feels like: {{ Math.round(currentConditions.feelsLike) }} °{{ unitsTemperature }}</div>
-        <div id="display_humidity">Humidity: {{ currentConditions.humidity }} %</div>
-        <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} {{ unitsWindSpeed }}</div>
-        <div id="display_weather_icon">
-          <img :src="setWeatherIcon" alt="Weather icon" />
-        </div>
+  <div class="weather-display">
+    <div class="block-left">
+      <div id="display_time_of_day">{{ getTimeOfDay }}</div>
+      <div id="display_weather">{{ currentConditions.description }}</div>
+      <div id="display_feels_like">Feels like: {{ Math.round(currentConditions.feelsLike) }} °{{ unitsTemperature }}</div>
+      <div id="display_humidity">Humidity: {{ currentConditions.humidity }} %</div>
+      <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} {{ unitsWindSpeed }}</div>
+    </div>
+    <div class="block-right">
+      <div id="display_location">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
+      <div id="display_temperature">{{ Math.round(currentConditions.temp) }} °{{ unitsTemperature }}</div>
+      <div id="display_weather_icon">
+      <img :src="setWeatherIcon" alt="Weather icon" />
       </div>
+    </div>
+  </div>
 </template>
 
 <script>
