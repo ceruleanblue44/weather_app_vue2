@@ -121,6 +121,7 @@ ul {
 .city-list {
   width: 90%;
   position: absolute;
+  z-index: 1;
   top: $search-field-height + 5px;
   background: white;
   border-radius: 0 0 5px 5px;
@@ -229,3 +230,8 @@ input:checked + .slider:before {
     width: 50%;
   }
 }
+
+// .wind-icon {
+//   width: 26px;
+//   height: 32px;
+// }

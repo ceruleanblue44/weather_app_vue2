@@ -103,7 +103,6 @@ export default {
       } catch (err) {
         this.formData.searchError = err.message;
         console.error(err.message);
-        // return err.message;
       }
     },
 

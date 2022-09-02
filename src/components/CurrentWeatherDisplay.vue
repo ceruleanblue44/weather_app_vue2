@@ -1,3 +1,4 @@
+<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
   <div class="weather-display">
     <div class="block-left">
@@ -5,7 +6,20 @@
       <div id="display_weather">{{ currentConditions.description }}</div>
       <div id="display_feels_like">Feels like: {{ Math.round(currentConditions.feelsLike) }} °{{ unitsTemperature }}</div>
       <div id="display_humidity">Humidity: {{ currentConditions.humidity }} %</div>
-      <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} {{ unitsWindSpeed }}</div>
+      <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} {{ unitsWindSpeed }}
+        <div class="wind-icon">
+          <!-- <svg :style="setWindArrow" width="16" height="22.5" viewBox="0 0 32 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.9057 43.7328C15.9371 43.8218 16.0629 43.8218 16.0943 43.7328L30.9215 1.7225C30.9509
+            1.63923 30.8658 1.56152 30.7855 1.59831L16 8.375L1.21449 1.59831C1.13422 1.56152 1.04914 1.63923 1.07853 1.7225L15.9057 43.7328Z"
+            stroke="teal" stroke-width="1.5"/>
+          </svg> -->
+          <svg :style="setWindArrow" width="26" height="32" viewBox="0 0 26 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.9072 30.7679C12.9407 30.8517 13.0593 30.8517 13.0928 30.7679L24.892 1.27009C24.9273
+          1.18174 24.8309 1.09863 24.7487 1.14658L13 8L1.25127 1.14658C1.16908 1.09863 1.0727 1.18174 1.10804
+          1.27009L12.9072 30.7679Z" stroke="teal" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
     </div>
     <div class="block-right">
       <div id="display_location">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
@@ -35,6 +49,13 @@ export default {
       return windArr[idx];
     },
 
+    setWindArrow() {
+      if (this.currentConditions.windDir === '') {
+        return '';
+      }
+      return `transform: rotate(${this.currentConditions.windDir}deg)`;
+    },
+
     getTimeOfDay() {
       let timeOfDay;
       if (!this.currentConditions.icon) {
@@ -62,6 +83,9 @@ export default {
       }
       return 'mph';
     },
+  },
+  created() {
+
   },
 };
 </script>
