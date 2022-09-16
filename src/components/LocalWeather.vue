@@ -3,7 +3,7 @@
     <!-- <button class="btn" @click="getCurrentCoords">Get current coords</button> -->
     <button class="btn btn__local" @click="localCoords">
     </button>
-    <div class="text-s">Current location</div>
+    <div class="text-s ml-10">Current location</div>
   </div>
 </template>
 
