@@ -5,15 +5,15 @@
         :key="index"
         @click="chooseCity(city)">
       <div class="city-list__item-location">
-        <div class="">{{ city.name }}, {{ city.country }}</div>
+        <div class="text-m">{{ city.name }}, {{ city.country }}</div>
         <div class="text-s" v-if="city.state">{{ city.state }}</div>
       </div>
       <div class="city-list__item-flag">
         <img :src="setCountryFlag(index)" alt="Country flag" />
       </div>
       <div class="city-list__item-coords">
-        <div class="text-xs">{{ city.lat.toFixed(3) }}</div>
-        <div class="text-xs">{{ city.lon.toFixed(3) }}</div>
+        <div class="text-xs">lat: {{ city.lat.toFixed(3) }}</div>
+        <div class="text-xs">lon: {{ city.lon.toFixed(3) }}</div>
       </div>
 
     </li>

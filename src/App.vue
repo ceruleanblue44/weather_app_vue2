@@ -4,22 +4,24 @@
         <h2>My weather app</h2>
         <UnitsToggleButton @toggle-units="toggleUnits"/>
       <form class="search-form" @submit.prevent @keydown.enter="getCoordsByCityName">
+        <div class="search-form__content">
         <SearchCity
           v-model="formData.searchCityQuery"
-          :error="formData.searchError"
           placeholder="Search city"
         />
-        <input
+        <button
           type="button"
           class="btn search-form__btn"
           @click="getCoordsByCityName"
         />
+        <div class="search-form__error text-s mt-10" v-if="formData.searchError">{{ formData.searchError }}</div>
         <SearchResults
-        v-show="!isCityChosen"
-        :citiesData="citiesData"
-        :searchCityQuery="formData.searchCityQuery"
-        @update-coords="updateCoords"
+          v-show="!isCityChosen"
+          :citiesData="citiesData"
+          :searchCityQuery="formData.searchCityQuery"
+          @update-coords="updateCoords"
       />
+      </div>
       </form>
       <LocalWeather @update-coords="updateCoords" />
 

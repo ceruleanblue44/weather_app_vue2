@@ -1,7 +1,7 @@
 <!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
   <div class="units__toggle">
-      <span class="units__text text-xs">Metric:<br /> °C, m/s</span>
+      <span class="units__text text-xs">Metric:<br /> °C,&nbsp;m/s</span>
       <!-- <div class="switch" @click="isChecked"> -->
       <div class="switch">
         <label for="units-checkbox" class="">
@@ -9,7 +9,7 @@
         <span class="slider round"></span>
         </label>
       </div>
-      <span class="units__text text-xs">Imperial:<br /> °F, mph</span>
+      <span class="units__text text-xs">Imperial:<br /> °F,&nbsp;mph</span>
   </div>
 </template>
 
