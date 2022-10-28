@@ -3,8 +3,10 @@ $search-field-height: 30px;
 $text-m: 0.9rem;
 $text-s: 0.8rem;
 $text-xs: 0.7rem;
+$bold: bold;
 $slate: #48484A;
 $teal: #6DC3C3;
+$darkTeal: #008080;
 $orange: #EC6E4C;
 
 // General styles:
@@ -42,7 +44,15 @@ ul {
   font-size: $text-xs;
 }
 
+.text-bold {
+  font-weight: bold;
+}
+
 // Margins / paddings 
+
+.ml-5 {
+  margin-left: 5px;
+}
 
 .ml-10 {
   margin-left: 10px;
@@ -52,12 +62,33 @@ ul {
   margin-left: 20px;
 }
 
-.mt-10 {
-  margin-top: 10px;
+
+.mt-5 {
+  margin-top: 5px;
 }
 
 .mt-8 {
   margin-top: 8px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-5 {
+  margin-bottom: 5px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
 }
 
 // General alignment
@@ -72,12 +103,12 @@ ul {
 
 .container {
   display: grid;
-  grid-template-columns: 7fr 3fr; 
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   grid-gap: 20px;
-  width: 80%;
-  max-width: 1000px;
-  margin: 2% auto 0;
-  padding: 30px;
+  width: 85%;
+  max-width: 900px;
+  margin: 2% auto;
+  padding: 1.5rem;
   background-color: #FFFFFF;
   border-radius: 10px;
   // border: 1px solid rgba(0, 0, 0, 0.2);
@@ -107,17 +138,29 @@ ul {
 .search-local {
   display: flex;
   justify-content: center;
+  // align-items: center;
+
+  @media (max-width: 835px) {
+    justify-self: start;
+    grid-area: 3 / 1;
+  }
 }
 
 .search-form {
   // display: flex;
   // position: relative;
   // border-radius: 5px;
+  @media (max-width: 835px) {
+    grid-area: 4 / 1;
+  }
 
   &__content {
     display: flex;
     position: relative;
     width: 80%;
+    @media (max-width: 835px) {
+      width: 90%;
+    }
   }
 
   &__btn {
@@ -127,11 +170,13 @@ ul {
     padding: 0 20px;
     // border-radius: 0 5px 5px 0;
     background: no-repeat center/45% url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjEgMzhDMzAuMzg5IDM4IDM4IDMwLjM4OSAzOCAyMUMzOCAxMS42MTEgMzAuMzg5IDQgMjEgNEMxMS42MTEgNCA0IDExLjYxMSA0IDIxQzQgMzAuMzg5IDExLjYxMSAzOCAyMSAzOFoiIHN0cm9rZT0iIzVBNUQ2MyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTI2LjY1NyAxNC4zNDNDMjUuOTE0OSAxMy41OTkgMjUuMDMzMiAxMy4wMDkxIDI0LjA2MjMgMTIuNjA3QzIzLjA5MTUgMTIuMjA0OSAyMi4wNTA4IDExLjk5ODYgMjEgMTJDMTkuOTQ5MiAxMS45OTg2IDE4LjkwODUgMTIuMjA0OSAxNy45Mzc3IDEyLjYwN0MxNi45NjY5IDEzLjAwOTEgMTYuMDg1MSAxMy41OTkgMTUuMzQzIDE0LjM0M00zMy4yMjIgMzMuMjIyTDQxLjcwNyA0MS43MDciIHN0cm9rZT0iIzVBNUQ2MyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=);
+    opacity: .7;
     transition: background-size .5s ease-in-out;
     // background-color: rgba($teal, .7);
-    // &:hover {
-    //   background-size: 47%;
-    // }
+    &:hover {
+      // background-size: 47%;
+      opacity: 1;
+    }
   }
 
   label {
@@ -169,7 +214,7 @@ input:autofill:focus {
   font-size: 1rem;
   -webkit-text-fill-color: rgba($slate, 1);
   box-shadow: 0 0 0px 1000px white inset;
-  transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 500s ease-in-out 0s;
 }
 
 form:focus-visible {
@@ -185,6 +230,9 @@ form:focus-visible {
   z-index: 1;
   top: $search-field-height;
   background: white;
+  border-right: 1px solid rgba($teal, .5);
+  border-bottom: 1px solid rgba($teal, .5);
+  border-left: 1px solid rgba($teal, .5);
   border-radius: 0 0 5px 5px;
   padding: 10px;
   cursor: pointer;
@@ -212,6 +260,11 @@ form:focus-visible {
   justify-self: end;
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 835px) {
+    justify-self: start;
+    grid-area: 2 / 1;
+  }
 }
 
 /* The toggle switch - the box around the slider */
@@ -286,10 +339,31 @@ input:checked + .slider:before {
 .weather-display {
   grid-column: span 2;
   display: flex;
+  flex-wrap: wrap;
 
   .block-left, .block-right {
     width: 50%;
+    min-width: 280px;
   }
+
+  .block-right {
+    padding-top: 10px;
+  }
+
+  .display_location {
+    font-size: 1.7rem;
+  }
+
+  .display_temperature,
+  .display_description {
+    font-size: 1.2rem;
+  }
+
+  .wind-icon {
+  // width: 26px;
+  // height: 32px;
+  // display: inline-block;
+}
 
   // &.night {
   //   background: linear-gradient(180deg, #40405C 0%, #6F71AA 80%, #8A76AB 100%);
@@ -300,7 +374,4 @@ input:checked + .slider:before {
   // }
 }
 
-// .wind-icon {
-//   width: 26px;
-//   height: 32px;
-// }
+

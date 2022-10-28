@@ -3,24 +3,25 @@
   <div :class="['weather-display', getTimeOfDay]">
     <div class="block-left">
       <!-- <div id="display_time_of_day">{{ getTimeOfDay }}</div> -->
-      <div id="display_weather">{{ currentConditions.description }}</div>
-      <div id="display_feels_like">Feels like: {{ Math.round(currentConditions.feelsLike) }} °{{ unitsTemperature }}</div>
-      <div id="display_humidity">Humidity: {{ currentConditions.humidity }} %</div>
-      <div id="display_wind">Wind: {{ windConverter }} {{ currentConditions.windSpeed }} {{ unitsWindSpeed }}
-        <div class="wind-icon ml-20">
+      <div class="display_location mb-10">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
+      <div class="display_description mb-5">{{ currentConditions.description }}</div>
+      <div class="display_temperature">{{ Math.round(currentConditions.temp) }} °{{ unitsTemperature }}</div>
+      <div class="display_weather_icon">
+      <img :src="setWeatherIcon" alt="Weather icon" />
+      </div>
+    </div>
+    <div class="block-right">
+      <div class="display_feels_like mb-5">
+        <span class="text-bold">Feels like:</span> {{ Math.round(currentConditions.feelsLike) }} °{{ unitsTemperature }}</div>
+      <div class="display_humidity mb-5"><span class="text-bold">Humidity:</span> {{ currentConditions.humidity }} %</div>
+      <div class="display_wind mb-5"><span class="text-bold">Wind:</span> {{ windConverter }} {{ currentConditions.windSpeed }} {{ unitsWindSpeed }}
+        <div class="wind-icon ml-10 mt-10">
           <svg :style="setWindArrow" width="26" height="32" viewBox="0 0 26 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12.9072 30.7679C12.9407 30.8517 13.0593 30.8517 13.0928 30.7679L24.892 1.27009C24.9273
           1.18174 24.8309 1.09863 24.7487 1.14658L13 8L1.25127 1.14658C1.16908 1.09863 1.0727 1.18174 1.10804
           1.27009L12.9072 30.7679Z" stroke="teal" stroke-width="1.5"/>
           </svg>
         </div>
-      </div>
-    </div>
-    <div class="block-right">
-      <div id="display_location">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
-      <div id="display_temperature">{{ Math.round(currentConditions.temp) }} °{{ unitsTemperature }}</div>
-      <div id="display_weather_icon">
-      <img :src="setWeatherIcon" alt="Weather icon" />
       </div>
     </div>
   </div>

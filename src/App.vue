@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <main class="container">
-        <h2>My weather app</h2>
+        <h2>Weather app</h2>
         <UnitsToggleButton @toggle-units="toggleUnits"/>
       <form class="search-form" @submit.prevent @keydown.enter="getCoordsByCityName">
         <div class="search-form__content">
@@ -14,7 +14,6 @@
           class="btn search-form__btn"
           @click="getCoordsByCityName"
         />
-        <div class="search-form__error text-s mt-10" v-if="formData.searchError">{{ formData.searchError }}</div>
         <SearchResults
           v-show="!isCityChosen"
           :citiesData="citiesData"
@@ -22,6 +21,7 @@
           @update-coords="updateCoords"
       />
       </div>
+       <div class="search-form__error text-s mt-10" v-if="formData.searchError">{{ formData.searchError }}</div>
       </form>
       <LocalWeather @update-coords="updateCoords" />
 
