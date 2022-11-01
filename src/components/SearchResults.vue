@@ -3,7 +3,8 @@
   <ul class="city-list" v-if="citiesData">
     <li class="city-list__item" v-for="(city, index) in citiesData"
         :key="index"
-        @click="chooseCity(city)">
+        @click="chooseCity(city)"
+        @keydown.enter="chooseCity(city)">
       <div class="city-list__item-location">
         <div class="text-m">{{ city.name }}, {{ city.country }}</div>
         <div class="text-s" v-if="city.state">{{ city.state }}</div>

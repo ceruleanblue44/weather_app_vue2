@@ -154,6 +154,10 @@ ul {
     grid-area: 4 / 1;
   }
 
+  @media (max-width: 350px) {
+    width: 200px;
+  }
+
   &__content {
     display: flex;
     position: relative;
@@ -243,6 +247,14 @@ form:focus-visible {
     justify-content: space-between;
     padding: 5px 0;
     border-bottom: 1px solid rgba($teal, 1);
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:hover {
+      background-color: rgba($teal, .1);
+    }
 
     &-location {
       width: 40%;

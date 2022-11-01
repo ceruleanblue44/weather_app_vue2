@@ -13,6 +13,7 @@
           type="button"
           class="btn search-form__btn"
           @click="getCoordsByCityName"
+          aria-label="Search city"
         />
         <SearchResults
           v-show="!isCityChosen"
@@ -61,7 +62,7 @@ export default {
       citiesData: null,
       units: 'metric',
       currentConditions: null,
-      apiData: null,
+      // apiData: null,
     };
   },
 
@@ -128,7 +129,7 @@ export default {
         });
         // console.log(response.data);
         this.isDataLoaded = true;
-        this.apiData = response.data || {};
+        // this.apiData = response.data || {};
         this.currentConditions = {
           city: response.data.name,
           country: response.data.sys.country,

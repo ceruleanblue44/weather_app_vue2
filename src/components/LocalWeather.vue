@@ -1,9 +1,9 @@
 <template>
   <div class="search-local">
     <!-- <button class="btn" @click="getCurrentCoords">Get current coords</button> -->
-    <button class="btn btn__local" @click="localCoords">
+    <button class="btn btn__local" aria-label="Search current location" @click="localCoords">
     </button>
-    <div class="ml-10 mt-5">Current location</div>
+    <div class="ml-10 mt-8">Current location</div>
   </div>
 </template>
 

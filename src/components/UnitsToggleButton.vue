@@ -4,7 +4,7 @@
       <span class="units__text text-xs">Metric:<br /> °C,&nbsp;m/s</span>
       <!-- <div class="switch" @click="isChecked"> -->
       <div class="switch">
-        <label for="units-checkbox" class="">
+        <label for="units-checkbox" aria-label="Units toggle">
         <input type="checkbox" name="units" id="units-checkbox" @change="toggle">
         <span class="slider round"></span>
         </label>

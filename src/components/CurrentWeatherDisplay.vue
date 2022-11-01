@@ -2,7 +2,6 @@
 <template>
   <div :class="['weather-display', getTimeOfDay]">
     <div class="block-left">
-      <!-- <div id="display_time_of_day">{{ getTimeOfDay }}</div> -->
       <div class="display_location mb-10">{{ currentConditions.city }}, {{ currentConditions.country }}</div>
       <div class="display_description mb-5">{{ currentConditions.description }}</div>
       <div class="display_temperature">{{ Math.round(currentConditions.temp) }} °{{ unitsTemperature }}</div>
@@ -79,9 +78,6 @@ export default {
       }
       return 'mph';
     },
-  },
-  created() {
-
   },
 };
 </script>
