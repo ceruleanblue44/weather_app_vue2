@@ -1,0 +1,11 @@
+@import 'variables';
+
+.search-local {
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 835px) {
+    justify-self: start;
+    grid-area: 3 / 1;
+  }
+}

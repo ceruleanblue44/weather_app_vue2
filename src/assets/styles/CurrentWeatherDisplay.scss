@@ -1,0 +1,25 @@
+@import 'variables';
+
+.weather-display {
+  grid-column: span 2;
+  display: flex;
+  flex-wrap: wrap;
+
+  .block-left, .block-right {
+    width: 50%;
+    min-width: 280px;
+  }
+
+  .block-right {
+    padding-top: 10px;
+  }
+
+  .display_location {
+    font-size: 1.7rem;
+  }
+
+  .display_temperature,
+  .display_description {
+    font-size: 1.2rem;
+  }
+}

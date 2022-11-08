@@ -1,4 +1,3 @@
-<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
   <ul class="city-list" v-if="citiesData">
     <li class="city-list__item" v-for="(city, index) in citiesData"
@@ -34,7 +33,7 @@ export default {
         return '';
       }
       const country = this.citiesData.at(idx).country.toLowerCase();
-      return `http://openweathermap.org/images/flags/${country}.png`;
+      return `https://openweathermap.org/images/flags/${country}.png`;
     },
 
     chooseCity(city) {

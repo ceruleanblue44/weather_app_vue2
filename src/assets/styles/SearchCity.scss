@@ -1,0 +1,80 @@
+@import 'variables';
+
+.search-form {
+  // display: flex;
+  // position: relative;
+  // border-radius: 5px;
+  @media (max-width: 835px) {
+    grid-area: 4 / 1;
+  }
+
+  @media (max-width: 350px) {
+    width: 200px;
+  }
+
+  &__content {
+    display: flex;
+    position: relative;
+    width: 80%;
+    @media (max-width: 835px) {
+      width: 90%;
+    }
+  }
+
+  &__btn {
+    position: absolute;
+    right: 0;
+    height: $search-field-height;
+    padding: 0 20px;
+    // border-radius: 0 5px 5px 0;
+    background: no-repeat center/45% url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjEgMzhDMzAuMzg5IDM4IDM4IDMwLjM4OSAzOCAyMUMzOCAxMS42MTEgMzAuMzg5IDQgMjEgNEMxMS42MTEgNCA0IDExLjYxMSA0IDIxQzQgMzAuMzg5IDExLjYxMSAzOCAyMSAzOFoiIHN0cm9rZT0iIzVBNUQ2MyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTI2LjY1NyAxNC4zNDNDMjUuOTE0OSAxMy41OTkgMjUuMDMzMiAxMy4wMDkxIDI0LjA2MjMgMTIuNjA3QzIzLjA5MTUgMTIuMjA0OSAyMi4wNTA4IDExLjk5ODYgMjEgMTJDMTkuOTQ5MiAxMS45OTg2IDE4LjkwODUgMTIuMjA0OSAxNy45Mzc3IDEyLjYwN0MxNi45NjY5IDEzLjAwOTEgMTYuMDg1MSAxMy41OTkgMTUuMzQzIDE0LjM0M00zMy4yMjIgMzMuMjIyTDQxLjcwNyA0MS43MDciIHN0cm9rZT0iIzVBNUQ2MyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4=);
+    opacity: .7;
+    transition: background-size .5s ease-in-out;
+    // background-color: rgba($teal, .7);
+    &:hover {
+      // background-size: 47%;
+      opacity: 1;
+    }
+  }
+
+  label {
+    width: 100%;
+  }
+
+  // label:focus-within {
+  //   width: 100%;
+  // }
+
+  &__input {
+  width: 100%;
+  padding-left: 10px;
+  border: 1px solid rgba($teal, .5);
+  border-radius: 5px;
+  // border: none;
+  position: relative;
+  height: $search-field-height;
+
+    &:focus-visible {
+      outline: none;
+      border: 1px solid rgba($teal, 1);
+      
+    }
+  }
+
+  &__error {
+  color: crimson; 
+  }
+}
+
+input:autofill,
+input:autofill:hover, 
+input:autofill:focus {
+  font-size: 1rem;
+  -webkit-text-fill-color: rgba($slate, 1);
+  box-shadow: 0 0 0px 1000px white inset;
+  transition: background-color 500s ease-in-out 0s;
+}
+
+form:focus-visible {
+  outline: none;
+}

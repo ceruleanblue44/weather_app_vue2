@@ -1,0 +1,39 @@
+@import 'variables';
+
+.city-list {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  top: $search-field-height;
+  background: white;
+  border-right: 1px solid rgba($teal, .5);
+  border-bottom: 1px solid rgba($teal, .5);
+  border-left: 1px solid rgba($teal, .5);
+  border-radius: 0 0 5px 5px;
+  padding: 10px;
+  cursor: pointer;
+
+  &__item {   
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba($teal, 1);
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:hover {
+      background-color: rgba($teal, .1);
+    }
+
+    &-location {
+      width: 40%;
+    }
+
+    &-coords {
+      width: 20%;
+    }
+  }
+}

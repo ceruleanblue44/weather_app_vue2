@@ -1,8 +1,6 @@
-<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
   <div class="units__toggle">
       <span class="units__text text-xs">Metric:<br /> °C,&nbsp;m/s</span>
-      <!-- <div class="switch" @click="isChecked"> -->
       <div class="switch">
         <label for="units-checkbox" aria-label="Units toggle">
         <input type="checkbox" name="units" id="units-checkbox" @change="toggle">

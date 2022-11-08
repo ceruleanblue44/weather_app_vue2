@@ -75,11 +75,7 @@ export default {
   },
 
   methods: {
-    enterKeyTest() {
-      console.log('Oh, crap!');
-    },
 
-    // eslint-disable-next-line consistent-return
     async getCoordsByCityName() {
       this.isCityChosen = false;
       this.citiesData = null;
@@ -102,11 +98,12 @@ export default {
           this.citiesData = response.data;
         }
         // console.log(response.data);
-        return response.data;
+        // return response.data;
       } catch (err) {
         this.formData.searchError = err.message;
         console.error(err.message);
       }
+      return this.citiesData;
     },
 
     async getCurrentWeather() {
@@ -158,9 +155,6 @@ export default {
     },
   },
 
-  computed: {
-
-  },
   watch: {
     units() {
       if (this.coords.lat && this.coords.lon) {

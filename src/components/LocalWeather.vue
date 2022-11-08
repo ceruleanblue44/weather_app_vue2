@@ -1,6 +1,5 @@
 <template>
   <div class="search-local">
-    <!-- <button class="btn" @click="getCurrentCoords">Get current coords</button> -->
     <button class="btn btn__local" aria-label="Search current location" @click="localCoords">
     </button>
     <div class="ml-10 mt-8">Current location</div>
@@ -17,16 +16,15 @@ export default {
       });
     },
 
-    // eslint-disable-next-line consistent-return
     async getCurrentCoords() {
+      const coords = {};
       try {
         const position = await this.getPosition();
-        const coords = {};
         ({ latitude: coords.lat, longitude: coords.lon } = position.coords);
-        return coords;
       } catch (err) {
         console.error(err.message);
       }
+      return coords;
     },
 
     async localCoords() {
