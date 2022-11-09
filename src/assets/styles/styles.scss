@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'mixins';
 
 // General styles:
 
@@ -13,7 +14,6 @@ body {
   background-color: rgba($teal, .2);
   color: $slate;
 }
-/* Read about variable fonts - it's smth modern and interesting :-)  */
 
 ul {
   margin: 0;
@@ -39,57 +39,18 @@ ul {
   font-weight: bold;
 }
 
-// Margins / paddings 
+// Margins
 
-.ml-5 {
-  margin-left: 5px;
-}
-
-.ml-10 {
-  margin-left: 10px;
-}
-
-.ml-20 {
-  margin-left: 20px;
-}
-
-.mt-5 {
-  margin-top: 5px;
-}
+@include set-margins(".mt-", "margin-top");
+@include set-margins(".mr-", "margin-right");
+@include set-margins(".mb-", "margin-bottom");
+@include set-margins(".ml-", "margin-left");
 
 .mt-8 {
   margin-top: 8px;
 }
 
-.mt-10 {
-  margin-top: 10px;
-}
-
-.mt-20 {
-  margin-top: 20px;
-}
-
-.mb-5 {
-  margin-bottom: 5px;
-}
-
-.mb-10 {
-  margin-bottom: 10px;
-}
-
-.mb-20 {
-  margin-bottom: 20px;
-}
-
 // General alignment
-
-.align-center {
-  align-items: center;
-}
-
-.justify-center {
-  justify-items: center;
-}
 
 .container {
   display: grid;
@@ -104,20 +65,8 @@ ul {
   box-shadow: 0 0 10px 0 rgba($slate, 0.12);
 }
 
+// Buttons
+
 .btn {
   border: none;
-
-  &__local {
-    border: none;
-    border-radius: 5px;
-    height: $search-field-height;
-    width: 35px;
-    background: no-repeat center/48% url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDYiIGhlaWdodD0iNTgiIHZpZXdCb3g9IjAgMCA0NiA1OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMjMuNTM1NCA1Ni4wNTQxQzI3LjkyMjcgNTMuNDExIDMyLjk2MTUgNDcuNzQ3MyAzNi44OTIyIDQxLjQ1MTNDNDAuODE4NCAzNS4xNjI1IDQzLjc1IDI4LjA2NTggNDMuNzUgMjIuNUM0My43NSAxMS4yOTg0IDM0LjQ0MTkgMi4yNSAyMyAyLjI1QzExLjU1ODEgMi4yNSAyLjI1IDExLjI5ODQgMi4yNSAyMi41QzIuMjUgMjguMDY1OCA1LjE4MTY1IDM1LjE2MjUgOS4xMDc4NCA0MS40NTEzQzEzLjAzODUgNDcuNzQ3MyAxOC4wNzczIDUzLjQxMSAyMi40NjQ2IDU2LjA1NDFDMjIuNzk2IDU2LjI1MzggMjMuMjA0IDU2LjI1MzcgMjMuNTM1NCA1Ni4wNTQxWiIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyMyIgY3k9IjIyIiByPSI4LjI1IiBzdHJva2U9ImJsYWNrIiBzdHJva2Utd2lkdGg9IjEuNSIvPjwvc3ZnPg==);
-    transition: all .5s ease-in-out;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 5px 0 rgba($slate, 0.2);
-    }
-  }
 }

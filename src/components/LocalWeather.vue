@@ -1,6 +1,6 @@
 <template>
   <div class="search-local">
-    <button class="btn btn__local" aria-label="Search current location" @click="localCoords">
+    <button class="btn search-local__btn" type="button" aria-label="Search current location" @click="localCoords">
     </button>
     <div class="ml-10 mt-8">Current location</div>
   </div>
@@ -29,7 +29,6 @@ export default {
 
     async localCoords() {
       const coords = await this.getCurrentCoords();
-      // console.log(coords);
       this.$emit('update-coords', coords);
     },
 

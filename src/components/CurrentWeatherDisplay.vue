@@ -62,7 +62,7 @@ export default {
 
     setWeatherIcon() {
       return this.currentConditions.icon
-        ? `http://openweathermap.org/img/wn/${this.currentConditions.icon}@2x.png`
+        ? `https://openweathermap.org/img/wn/${this.currentConditions.icon}@2x.png`
         : '';
     },
     unitsTemperature() {

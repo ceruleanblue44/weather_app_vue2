@@ -19,6 +19,7 @@ export default {
       isToggled: false,
     };
   },
+
   methods: {
     toggle() {
       this.isToggled = !this.isToggled;

@@ -43,12 +43,12 @@ export default {
     },
   },
 
-  computed: {
-    filteredCitiesData() {
-      return this.citiesData
-        ? this.citiesData.filter((city) => city.name.toLowerCase().includes(this.searchCityQuery.toLowerCase()))
-        : '';
-    },
-  },
+  // computed: {
+  //   filteredCitiesData() {
+  //     return this.citiesData
+  //       ? this.citiesData.filter((city) => city.name.toLowerCase().includes(this.searchCityQuery.toLowerCase()))
+  //       : '';
+  //   },
+  // },
 };
 </script>
