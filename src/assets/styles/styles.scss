@@ -69,4 +69,8 @@ ul {
 
 .btn {
   border: none;
+
+  &:focus-visible {
+    outline: none;
+  }
 }

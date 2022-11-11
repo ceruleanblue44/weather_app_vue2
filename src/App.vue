@@ -62,7 +62,6 @@ export default {
       citiesData: null,
       units: 'metric',
       currentConditions: null,
-      // apiData: null,
     };
   },
 
@@ -126,7 +125,6 @@ export default {
         });
         // console.log(response.data);
         this.isDataLoaded = true;
-        // this.apiData = response.data || {};
         this.currentConditions = {
           city: response.data.name,
           country: response.data.sys.country,

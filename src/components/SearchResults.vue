@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { API_FLAGS } from '@/config';
+
 export default {
   name: 'SearchResults',
   props: {
@@ -33,7 +35,7 @@ export default {
         return '';
       }
       const country = this.citiesData.at(idx).country.toLowerCase();
-      return `https://openweathermap.org/images/flags/${country}.png`;
+      return `${API_FLAGS}/${country}.png`;
     },
 
     chooseCity(city) {
