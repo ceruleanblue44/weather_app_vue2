@@ -7,18 +7,24 @@
 
 <script>
 export default {
+  // compatConfig: {
+  //   // COMPONENT_V_MODEL: false,
+  //   // or, for full vue 3 compat in this component:
+  //   MODE: 3,
+  // },
   name: 'SearchCity',
   props: {
     placeholder: String,
-    value: String,
+    modelValue: String,
   },
+  emits: ['update:modelValue'],
   computed: {
     dataValue: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(value) {
-        this.$emit('input', value);
+        this.$emit('update:modelValue', value);
       },
     },
   },
